@@ -31,18 +31,18 @@ const issueBook = (bookName) => {
     displayIssuedBooks();
 };
 
-// Function to display all issued books
+// Function to display all issued books (optimized)
 const displayIssuedBooks = () => {
     const books = getLocalStorage('issuedBooks');
     const tbody = document.querySelector('#issuedBooksTable tbody');
     if (!tbody) return; // Check if tbody exists
-    tbody.innerHTML = ''; // Clear table rows
+    let rows = ''; // Use a single string to batch DOM updates
 
     books.forEach((book, index) => {
         const returnTime = calculateReturnTime(book.issuedAt);
         const fine = calculateFine(book.issuedAt, new Date().toISOString());
 
-        tbody.innerHTML += `
+        rows += `
             <tr>
                 <td>${book.name}</td>
                 <td>${new Date(book.issuedAt).toLocaleString()}</td>
@@ -52,17 +52,19 @@ const displayIssuedBooks = () => {
             </tr>
         `;
     });
+
+    tbody.innerHTML = rows; // Update the DOM once after the loop
 };
 
-// Function to display all returned books
+// Function to display all returned books (optimized)
 const displayReturnedBooks = () => {
     const books = getLocalStorage('returnedBooks');
     const tbody = document.querySelector('#returnedBooksTable tbody');
     if (!tbody) return; // Check if tbody exists
-    tbody.innerHTML = ''; // Clear table rows
+    let rows = ''; // Use a single string to batch DOM updates
 
     books.forEach((book) => {
-        tbody.innerHTML += `
+        rows += `
             <tr>
                 <td>${book.name}</td>
                 <td>${new Date(book.issuedAt).toLocaleString()}</td>
@@ -71,6 +73,8 @@ const displayReturnedBooks = () => {
             </tr>
         `;
     });
+
+    tbody.innerHTML = rows; // Update the DOM once after the loop
 };
 
 // Function to return a book
@@ -86,19 +90,26 @@ const returnBook = (index) => {
         document.querySelector('#payFineModal').style.display = 'block';
         document.querySelector('#payFineButton').onclick = () => payFine(index, fine);
     } else {
-        book.returnedAt = returnedAt;
-        book.finePaid = fine; // Set fine amount as paid
-
-        const returnedBooks = getLocalStorage('returnedBooks');
-        returnedBooks.push(book);
-        setLocalStorage('returnedBooks', returnedBooks);
-
-        issuedBooks.splice(index, 1); // Remove book from issued list
-        setLocalStorage('issuedBooks', issuedBooks);
-
-        displayIssuedBooks();
-        displayReturnedBooks();
+        completeReturnProcess(index, returnedAt, fine);
     }
+};
+
+// Consolidated function to complete the return process
+const completeReturnProcess = (index, returnedAt, fine) => {
+    const issuedBooks = getLocalStorage('issuedBooks');
+    const book = issuedBooks[index];
+    book.returnedAt = returnedAt;
+    book.finePaid = fine; // Set fine amount as paid
+
+    const returnedBooks = getLocalStorage('returnedBooks');
+    returnedBooks.push(book);
+    setLocalStorage('returnedBooks', returnedBooks);
+
+    issuedBooks.splice(index, 1); // Remove book from issued list
+    setLocalStorage('issuedBooks', issuedBooks);
+
+    displayIssuedBooks();
+    displayReturnedBooks();
 };
 
 // Function to pay the fine
