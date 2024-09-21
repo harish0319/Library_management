@@ -6,16 +6,6 @@ body {
     padding: 0;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-    padding: 20px;
-    background: #fff;
-    margin-top: 30px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
 h1, h2 {
     text-align: center;
     color: #333;
@@ -50,7 +40,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #218838;
+    background-color: #d00e0e;
 }
 
 table {
@@ -72,32 +62,6 @@ th {
     background-color: #f2f2f2;
 }
 
-button.return-btn {
-    padding: 5px 10px;
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    margin-right: 5px;
-    transition: background-color 0.3s ease;
-}
-
-button.return-btn:hover {
-    background-color: #0056b3;
-}
-
-button.pay-btn {
-    padding: 5px 10px;
-    background-color: #ffc107;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button.pay-btn:hover {
-    background-color: #e0a800;
-}
 /* Modal Styles */
 .modal {
     display: none; 
@@ -113,7 +77,7 @@ button.pay-btn:hover {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #ffffff;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -132,4 +96,27 @@ button.pay-btn:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.return-button {
+    background-color: #3e8d46; /* Green background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    padding: 10px 20px;        /* Add some padding */
+    text-align: center;        /* Center the text */
+    text-decoration: none;     /* Remove underline */
+    display: inline-block;     /* Inline-block for proper spacing */
+    font-size: 16px;           /* Increase font size */
+    margin: 4px 2px;           /* Add some margin */
+    cursor: pointer;           /* Add a pointer cursor on hover */
+    border-radius: 5px;        /* Round the corners */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.return-button:hover {
+    background-color: #0a11c4; /* Darker green on hover */
+}
+
+.return-button:focus {
+    outline: none;             /* Remove the outline when focused */
 }
