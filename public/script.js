@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTime = new Date();
         const issuedTime = new Date(issuedAt);
         const timeDiff = (currentTime - issuedTime) / (1000 * 60);
-
+        
         let fine = 0;
         if (timeDiff > 60) {
             fine = Math.floor((timeDiff) / 60) * 10;
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-//2 min fine model
+// //2 min fine model
 // document.addEventListener('DOMContentLoaded', () => {
 //     const issueBookForm = document.getElementById('issueBookForm');
 //     const issuedBooksTable = document.getElementById('issuedBooksTable').querySelector('tbody');
