@@ -7,6 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFine = 0;
     let bookIdToReturn = null;
 
+    // Helper function to format date to dd-mm-yy
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = String(d.getFullYear()).slice(-2); // Get last two digits of year
+        return `${day}-${month}-${year}`;
+    };
+
     // Fetch and display all issued books
     const fetchIssuedBooks = async () => {
         const res = await fetch('/api/books/issued');
@@ -17,9 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.classList.add('card');
             card.innerHTML = `
-                <h3>Book Name:${book.name}</h3>
-                <p><strong>Book taken on:</strong> ${new Date(book.issuedAt).toLocaleString()}</p>
-                <p><strong>Book return date:</strong> ${new Date(new Date(book.issuedAt).getTime() + 60000).toLocaleString()}</p>
+                <h3>Book Name: ${book.name}</h3>
+                <p><strong>Book taken on:</strong> ${formatDate(book.issuedAt)}</p>
                 <p><strong>Current fine:</strong> ${fine > 0 ? fine + ' INR' : 'No fine'}</p>
                 <button class="return-button">Return Book</button>
             `;
@@ -96,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.classList.add('card');
             card.innerHTML = `
-                <h3>Book Name:${book.name}</h3>
-                <p><strong>Book Returned on:</strong> ${new Date(book.returnedAt).toLocaleString()}</p>
+                <h3>Book Name: ${book.name}</h3>
+                <p><strong>Book Returned on:</strong> ${formatDate(book.returnedAt)}</p>
                 <p><strong>Fine Paid:</strong> ${book.finePaid} INR</p>
             `;
             returnedBooksContainer.appendChild(card); // Append the card to the container
@@ -138,4 +146,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Polling to refresh issued books every minute
     setInterval(fetchIssuedBooks, 60000);
 });
-
