@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFine = 0;
     let bookIdToReturn = null;
 
-    // Helper function to format date and time with seconds and IST mention
     const formatDateTime = (date) => {
         const d = new Date(date);
         const day = String(d.getDate()).padStart(2, '0');
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    // Fetch and display all issued books
     const fetchIssuedBooks = () => {
         fetch('/api/books/issued')
             .then(res => res.json())
@@ -29,8 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 books.forEach((book) => {
                     const issuedTime = new Date(book.issuedAt);
                     const fine = calculateFine(issuedTime);
-                    
-                    // If the fine is greater than 0, set return time as current time; otherwise, set it to issuedAt + 1 minute
+
                     const returnTime = fine > 0 ? new Date() : new Date(issuedTime.getTime() + 1 * 60 * 1000);
     
                     const card = document.createElement('div');
@@ -51,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching issued books:', err));
     };
     
-    // Handle book issue form submission
+
     issueBookForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const bookName = document.getElementById('bookName').value;
@@ -72,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error('Error issuing book:', err));
     });
 
-    // Helper function to calculate fine
     const calculateFine = (issuedAt) => {
         const currentTime = new Date();
         const issuedTime = new Date(issuedAt);
@@ -84,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return fine;
     };
 
-    // Handle book return
     const returnBook = (id) => {
         fetch(`/api/books/return/${id}`, { method: 'PUT' })
             .then(res => res.json())
@@ -104,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error returning book:', err));
     };
 
-    // Complete the return process after fine payment or if no fine is due
     const completeReturn = (id, returnedAt = null) => {
         fetch(`/api/books/complete-return/${id}`, { method: 'PUT' })
             .then(() => {
@@ -114,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error completing return:', err));
     };
 
-    // Fetch and display all returned books
     const fetchReturnedBooks = () => {
         fetch('/api/books/returned')
             .then(res => res.json())
@@ -134,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching returned books:', err));
     };
 
-    // Handle fine payment
     document.getElementById('payFineButton').addEventListener('click', () => {
         if (bookIdToReturn !== null) {
             fetch(`/api/books/pay-fine/${bookIdToReturn}`, {

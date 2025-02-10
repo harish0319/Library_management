@@ -9,52 +9,20 @@
 <body>
     <h1>Library Management System</h1>
 
-    <!-- Book Issue Form -->
     <form id="issueBookForm">
         <label for="bookName">Book Name:</label>
         <input type="text" id="bookName" name="bookName" required>
         <button type="submit">Issue Book</button>
     </form>
 
-    <!-- Issued Books Table -->
     <h2>Issued Books</h2>
     <div id="issuedBooksContainer" class="card-container">
-        <!-- Issued book cards will be dynamically added here -->
     </div>
-    <!-- <table id="issuedBooksTable">
-        <thead>
-            <tr>
-                <th>Book Name</th>
-                <th>Issued At</th>
-                <th>Return By</th>
-                <th>Fine</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table> -->
 
-    <!-- Returned Books Table -->
     <h2>Returned Books</h2>
     <div id="returnedBooksContainer" class="card-container">
-        <!-- Returned book cards will be dynamically added here -->
     </div>
-    <!-- <table id="returnedBooksTable">
-        <thead>
-            <tr>
-                <th>Book Name</th>
-                <th>Issued At</th>
-                <th>Returned At</th>
-                <th>Fine Paid</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table> -->
-    <!-- Fine Payment Modal -->
+
     <div id="payFineModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
