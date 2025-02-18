@@ -95,4 +95,28 @@ exports.getReturnedBooks = async (req, res) => {
   }
 };
 
+exports.completeReturn = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const book = await Book.findByPk(id);
+      if (!book) {
+          return res.status(404).json({ error: 'Book not found' });
+      }
+
+      if (!book.returnedAt) {
+          return res.status(400).json({ error: 'Book return is not yet initiated' });
+      }
+
+      // Ensure fine is fully paid before marking return as complete
+      if (book.finePaid > 0) {
+          return res.status(400).json({ error: 'Fine must be paid before completing the return' });
+      }
+
+      // Prevent unnecessary updates
+      res.json({ message: 'Book return completed successfully', book });
+  } catch (error) {
+      res.status(500).json({ error: 'Error completing return' });
+  }
+};
 

@@ -6,6 +6,7 @@ const {
     returnBook,
     getReturnedBooks,
     payFine,
+    completeReturn,
 } = require('../controllers/bookController');
 
 //route to issue book
@@ -23,4 +24,5 @@ router.put('/pay-fine/:id', payFine);
 //route to get all returned books
 router.get('/returned', getReturnedBooks);
 
+router.put('/complete-return/:id', completeReturn);
 module.exports = router;
