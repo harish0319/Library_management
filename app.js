@@ -6,19 +6,15 @@ const bookRoutes = require('./routes/bookRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware to serve static files
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Book Routes
 app.use('/api/books', bookRoutes);
 
-// Route to serve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-//initialize the database and start the server
 sequelize
     .sync()
     .then(() => {

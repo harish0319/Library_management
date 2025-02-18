@@ -2,7 +2,6 @@
 const Book = require('../models/Book');
 const { Op } = require('sequelize');
 
-// Issue a new book
 exports.issueBook = async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'Book name is required!' });
@@ -11,7 +10,7 @@ exports.issueBook = async (req, res) => {
     const newBook = await Book.create({
       name,
       issuedAt: new Date(),
-      finePaid: 0, // Initially set fine as unpaid
+      finePaid: 0, 
     });
     res.status(201).json(newBook);
   } catch (error) {
@@ -19,17 +18,15 @@ exports.issueBook = async (req, res) => {
   }
 };
 
-// Get all issued books
 exports.getIssuedBooks = async (req, res) => {
   try {
-    const books = await Book.findAll({ where: { returnedAt: null } }); // Fetch issued books
+    const books = await Book.findAll({ where: { returnedAt: null } });
     res.json(books);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching issued books' });
   }
 };
 
-// Return a book and calculate fine
 exports.returnBook = async (req, res) => {
   const { id } = req.params;
   try {
@@ -38,29 +35,26 @@ exports.returnBook = async (req, res) => {
 
     const returnTime = new Date();
     const issuedTime = new Date(book.issuedAt);
-    const timeDiff = (returnTime - issuedTime) / (1000 * 60); // Time difference in minutes
+    const timeDiff = (returnTime - issuedTime) / (1000 * 60);
     let fine = 0;
 
-    if (timeDiff > 1) fine = Math.floor(timeDiff / 1) * 10; // Calculate fine if more than 1 minute
+    if (timeDiff > 1) fine = Math.floor(timeDiff / 1) * 10;
 
     if (fine > 0) {
-      // Set fine and keep book for fine payment if necessary
       book.fine = fine;
       await book.save();
-      res.json(book); // Send book info with fine for frontend handling
+      res.json(book); 
     } else {
-      // If no fine, complete the return immediately
       book.returnedAt = returnTime;
-      book.finePaid = 0; // No fine to pay
+      book.finePaid = 0;
       await book.save();
-      res.json(book); // Return book with no fine
+      res.json(book); 
     }
   } catch (error) {
     res.status(500).json({ error: 'Error returning the book' });
   }
 };
 
-// Pay fine and complete return
 exports.payFine = async (req, res) => {
   const { id } = req.params;
   const { finePaid } = req.body;
@@ -70,7 +64,6 @@ exports.payFine = async (req, res) => {
     if (!book) return res.status(404).json({ error: 'Book not found' });
 
     if (finePaid >= book.fine) {
-      // Mark the fine as paid and complete return
       book.finePaid = finePaid;
       book.returnedAt = new Date();
       await book.save();
@@ -83,11 +76,10 @@ exports.payFine = async (req, res) => {
   }
 };
 
-// Get all returned books
 exports.getReturnedBooks = async (req, res) => {
   try {
     const books = await Book.findAll({
-      where: { returnedAt: { [Op.not]: null } }, // Fetch returned books
+      where: { returnedAt: { [Op.not]: null } },
     });
     res.json(books);
   } catch (error) {
@@ -108,12 +100,9 @@ exports.completeReturn = async (req, res) => {
           return res.status(400).json({ error: 'Book return is not yet initiated' });
       }
 
-      // Ensure fine is fully paid before marking return as complete
       if (book.finePaid > 0) {
           return res.status(400).json({ error: 'Fine must be paid before completing the return' });
       }
-
-      // Prevent unnecessary updates
       res.json({ message: 'Book return completed successfully', book });
   } catch (error) {
       res.status(500).json({ error: 'Error completing return' });
