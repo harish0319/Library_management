@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching issued books:', err));
     };
     
-
     issueBookForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const bookName = document.getElementById('bookName').value;
